@@ -1,5 +1,6 @@
 # Local build setting environment
 .vscode/
+executable/
 
 # Prerequisites
 *.d
