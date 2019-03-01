@@ -1,3 +1,6 @@
+# Local build setting environment
+.vscode/
+
 # Prerequisites
 *.d
 
