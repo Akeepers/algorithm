@@ -3,12 +3,6 @@
 
 using namespace std;
 
-struct Node{
-    int val;
-    Node* next;
-    Node(int _val):val(_val) ,next(nullptr){}
-};
-
 class Solution {
 
 private:

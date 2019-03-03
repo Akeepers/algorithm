@@ -1,6 +1,7 @@
 # Local build setting environment
 .vscode/
 executable/
+sample.cpp
 
 # Prerequisites
 *.d
