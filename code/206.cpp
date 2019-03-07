@@ -25,15 +25,17 @@ class Solution
             {
                 auto node = new ListNode(head->val);
                 node->next = result;
-                result= node;
+                result = node;
                 head = head->next;
             }
 
             return result;
         }
-    };
-    int main()
-    {
-        system("pause");
-        return 0;
     }
+};
+
+int main()
+{
+    system("pause");
+    return 0;
+}

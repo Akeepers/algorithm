@@ -27,7 +27,7 @@ private:
         if(p1!=key){
             auto temp=key->val;
             key->val=p1->val;
-            p2->val = temp;
+            p1->val = temp;
         }
         return p1;
     }
