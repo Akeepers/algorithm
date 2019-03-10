@@ -19,9 +19,20 @@ public:
     }
 };
 class Solution {
+private:
+    void popluate(Node* node){
+        if(node->left==nullptr)
+            return;
+        node->left->next = node->right;
+        node->right->next = node->next == nullptr ? nullptr : node->next->left;
+        popluate(node->left);
+        popluate(node->right);
+    }
 public:
     Node* connect(Node* root) {
         root->next = nullptr;
+        popluate(root);
+        return root;
     }
 };
 int main(){
