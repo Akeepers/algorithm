@@ -8,23 +8,23 @@ class Solution
   public:
     int findDuplicate(vector<int> &nums)
     {
-        int low = 1;
-        int high = nums.size() - 1;
-        do
+        int slow = 0;
+        int fast = 0;
+        int finder = 0;
+        while (true)
         {
-            int count = 0;
-            int mid = (low + high) / 2;
-            for (auto num:nums)
-            {
-                if (num <= mid)
-                    count++;
-            }
-            if (count > mid)
-                high = mid;
-            else
-                low = mid+1;
-        } while (low < high);
-        return low;
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+            if (slow == fast)
+                break;
+        }
+        while (true)
+        {
+            slow = nums[slow];
+            finder = nums[finder];
+            if (slow == finder)
+                return slow;
+        }
     }
 };
 
