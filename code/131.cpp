@@ -3,8 +3,13 @@
 
 using namespace std;
 
+
+
 class Solution
 {
+    private: onePartition(string s){
+        
+    }
   public:
     vector<vector<string>> partition(string s)
     {
