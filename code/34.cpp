@@ -27,24 +27,19 @@ class Solution
             return ret;
         int low = 0;
         int high = nums.size() - 1;
-        int mid = (low + high) / 2;
-        while (mid != low && mid != +high)
-        {
-            if (nums[mid] == target)
-            {
+        while(low<high){
+            int mid=(low + high) / 2;
+            if(nums[mid]==target){
                 getRange(nums, mid, ret);
                 return ret;
-            }
-            else if (nums[mid] > target)
-                high = mid - 1;
-            else
+            }else if(nums[mid]<target)
                 low = mid + 1;
-            mid = (low + high) / 2;
+            else
+                high = mid - 1;
+
         }
         if (nums[low] == target)
             getRange(nums, low, ret);
-        if (nums[high] == target)
-            getRange(nums, high, ret);
         return ret;
     }
 };
