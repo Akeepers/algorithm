@@ -11,9 +11,10 @@ public:
         if (nums.empty() || k % nums.size() == 0)
             return;
         int n = nums.size();
+        vector<int> vec(nums);
         for (int i = 0; i < n; ++i)
         {
-            swap(nums[i], nums[(i + k) % n]);
+            nums[(i + k) % n] = vec[i];
         }
     }
 };

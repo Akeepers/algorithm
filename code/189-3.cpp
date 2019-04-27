@@ -11,9 +11,16 @@ public:
         if (nums.empty() || k % nums.size() == 0)
             return;
         int n = nums.size();
-        for (int i = 0; i < n; ++i)
+        k = k % n;
+        int start = 0;
+        while (n && (k %= n))
         {
-            swap(nums[i], nums[(i + k) % n]);
+            for (int i = 0; i < k; ++i)
+            {
+                swap(nums[i + start], nums[n - k + i + start]);
+            }
+            start += k;
+            n -= k;
         }
     }
 };
