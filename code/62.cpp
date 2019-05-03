@@ -5,27 +5,22 @@ using namespace std;
 
 class Solution
 {
-    void visit(int i, int j, const int &m, const int &n, int &count)
-    {
-        if (i < 1 || j < 1 || i > m || j > n)
-            return;
-        if (i == m && j == n)
-        {
-            count++;
-            return;
-        }
-        visit(i + 1, j, m, n, count);
-        visit(i, j + 1, m, n, count);
-    }
-
-public:
+  public:
     int uniquePaths(int m, int n)
     {
         if (m < 1 || n < 1)
             return 0;
-        int count = 0;
-        visit(1, 1, m, n, count);
-        return count;
+        if (m == 1 || n == 1)
+            return 1;
+        vector<int> dp(n, 1);
+        for (int i = 1; i < m; ++i)
+        {
+            for (int j = 1; j < n; ++j)
+            {
+                dp[j] = dp[j - 1] + dp[j];
+            }
+        }
+        return dp[n - 1];
     }
 };
 
