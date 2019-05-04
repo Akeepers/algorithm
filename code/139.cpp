@@ -7,7 +7,7 @@ using namespace std;
 
 class Solution
 {
-public:
+  public:
     bool wordBreak(string s, vector<string> &wordDict)
     {
         unordered_set<string> dicts;
@@ -30,7 +30,7 @@ public:
             {
                 if (dp[j])
                 {
-                    word = s.substr(j, i - j);
+                    word = s.substr(j + 1, i - j);
                     if (dicts.find(word) != dicts.end())
                     {
                         dp[i] = true;
