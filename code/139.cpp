@@ -1,13 +1,13 @@
 #include <iostream>
-#include <vector>
-#include <unordered_set>
 #include <string>
+#include <unordered_set>
+#include <vector>
 
 using namespace std;
 
 class Solution
 {
-  public:
+public:
     bool wordBreak(string s, vector<string> &wordDict)
     {
         unordered_set<string> dicts;
@@ -16,7 +16,7 @@ class Solution
             dicts.insert(item);
         }
         vector<int> dp(s.size(), false);
-        if (dicts.find(to_string(s[0])) != dicts.end())
+        if (dicts.find(string(1, s[0])) != dicts.end())
             dp[0] = true;
         for (int i = 1; i < s.size(); ++i)
         {
@@ -46,8 +46,8 @@ class Solution
 int main()
 {
     Solution solution;
-    vector<string> inputs={"leet","code"};
-    solution.wordBreak("leetcode",inputs);
+    vector<string> inputs = {"a"};
+    solution.wordBreak("a", inputs);
     system("pause");
     return 0;
 }
