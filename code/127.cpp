@@ -11,7 +11,7 @@ private:
     int visit(const string &beginWord, const string &endWord, unordered_map<string, bool> &dicts)
     {
         vector<string> q1 = {beginWord};
-        int length = 0;
+        int length = 1;
         while (true)
         {
             length++;
@@ -25,7 +25,7 @@ private:
 
                     for (int j = 1; j < 26; ++j)
                     {
-                        temp[i] = word[i] + (d + j) % 26;
+                        temp[i] = 'a' + (d + j) % 26;
                         if (dicts.find(temp) != dicts.end() && !dicts[temp])
                         {
                             if (temp == endWord)
@@ -52,6 +52,8 @@ public:
         unordered_map<string, bool> dicts;
         for (auto word : wordList)
             dicts.insert(pair<string, bool>(word, false));
+        if (dicts.find(endWord) == dicts.end())
+            return 0;
         return visit(beginWord, endWord, dicts);
     }
 };
