@@ -1,48 +1,104 @@
 #include <iostream>
 #include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
 using namespace std;
 
-pair<int, int> calLocation(int m, int n, pair<int, int> start, const vector<char> &instructions)
-{
-    unordered_map<int, unordered_set<int>> visit;
+vector<unordered_map<int, int>> rowsStart, rowsEnd, colsStart, colsEnd;
 
-    int i = start.first, j = start.second;
-    visit[i].insert(j);
+void insert(int x, int y)
+{
+    bool l = rowsEnd[x].count(y - 1), r = rowsStart[x].count(y + 1);
+    if (l && r)
+    {
+        int ls = rowsEnd[x][y - 1], re = rowsStart[x][y + 1];
+        rowsStart[x][ls] = re, rowsEnd[x][re] = ls;
+    }
+    else if (l)
+    {
+        int ls = rowsEnd[x][y - 1];
+        rowsStart[x][ls] = y, rowsEnd[x][y] = ls;
+    }
+    else if (r)
+    {
+        int re = rowsStart[x][y + 1];
+        rowsEnd[x][re] = y, rowsStart[x][y] = re;
+    }
+    else
+    {
+        rowsEnd[x][y] = rowsStart[x][y] = y;
+    }
+
+    l = colsEnd[y].count(x - 1), r = colsStart[y].count(x + 1);
+    if (l && r)
+    {
+        int ls = colsEnd[y][x - 1], re = colsStart[y][x + 1];
+        colsStart[y][ls] = re, colsEnd[y][re] = ls;
+    }
+    else if (l)
+    {
+        int ls = colsEnd[y][x - 1];
+        colsStart[y][ls] = x, colsEnd[y][x] = ls;
+    }
+    else if (r)
+    {
+        int re = colsStart[y][x + 1];
+        colsEnd[y][re] = x, colsStart[y][x] = re;
+    }
+    else
+    {
+        colsEnd[y][x] = colsStart[y][x] = x;
+    }
+}
+
+pair<int, int> calLocation(int m, int n, int x, int y, const string &instructions)
+{
+    rowsStart.clear();
+    rowsEnd.clear();
+    colsStart.clear();
+    colsEnd.clear();
+    rowsStart.resize(m + 1);
+    rowsEnd.resize(m + 1);
+    colsStart.resize(n + 1);
+    colsEnd.resize(n + 1);
+
+    rowsStart[x][y] = y;
+    rowsEnd[x][y] = y;
+    colsStart[y][x] = x;
+    colsEnd[y][x] = x;
+
     for (auto item : instructions)
     {
         switch (item)
         {
         case 'E':
-            do
-            {
-                j++;
-            } while (visit.find(i) != visit.end() && visit[i].find(j) != visit[i].end());
+            if (rowsStart[x].count(y + 1))
+                y = rowsStart[x][y + 1] + 1;
+            else
+                y++;
             break;
         case 'W':
-            do
-            {
-                j--;
-            } while (visit.find(i) != visit.end() && visit[i].find(j) != visit[i].end());
+            if (rowsEnd[x].count(y - 1))
+                y = rowsEnd[x][y - 1] - 1;
+            else
+                y--;
             break;
         case 'S':
-            do
-            {
-                i++;
-            } while (visit.find(i) != visit.end() && visit[i].find(j) != visit[i].end());
+            if (colsStart[y].count(x + 1))
+                x = colsStart[y][x + 1] + 1;
+            else
+                x++;
             break;
         case 'N':
-            do
-            {
-                i--;
-            } while (visit.find(i) != visit.end() && visit[i].find(j) != visit[i].end());
+            if (colsEnd[y].count(x - 1))
+                x = colsEnd[y][x - 1] - 1;
+            else
+                x--;
             break;
         }
-        visit[i].insert(j);
+        insert(x, y);
     }
-    return pair<int, int>(i , j );
+    return make_pair(x, y);
 }
 
 int main()
@@ -52,17 +108,10 @@ int main()
     for (int i = 1; i <= t; ++i)
     {
         int n, r, c, s_r, s_c;
-        cin >> n >> r >> c >> s_r >> s_c;
-        char temp;
-        int maxN = 0, maxS = 0, maxW = 0, maxE = 0;
-        vector<char> instructions(n);
-        int j = 0;
-        while (n--)
-        {
-            cin >> temp >> right;
-            instructions[j++] = temp;
-        }
-        auto ret = calLocation(r, c, pair<int, int>(s_r, s_c), instructions);
+        string instructions;
+        cin >> n >> r >> c >> s_r >> s_c >> instructions;
+
+        auto ret = calLocation(r, c, s_r, s_c, instructions);
         cout << "Case #" << i << ": " << ret.first << "  " << ret.second << endl;
     }
     return 0;
