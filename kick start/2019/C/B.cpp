@@ -1,71 +1,54 @@
 #include <algorithm>
 #include <iostream>
-#include <unordered_map>
-#include <unordered_set>
+#include <stack>
 #include <vector>
 
 using namespace std;
 
-vector<pair<int, int>> rowU(int n, const vector<int> &row)
+int largestRectangleArea(vector<int> &heights)
 {
-    int start = 0;
-    int i = 0;
-    vector<pair<int, int>> res;
+    if (heights.empty())
+        return 0;
+    if (heights.size() == 1)
+        return heights[0];
+    heights.emplace_back(-1);
+    int n = heights.size();
+    int maxArea = 0, i = 0;
+    stack<int> indexs;
     while (i < n)
     {
-        if (row[i] == row[start])
-            i++;
+        if (indexs.empty() || heights[i] >= heights[indexs.top()])
+            indexs.push(i++);
         else
         {
-            if (i != start)
-                res.emplace_back(pair<int, int>(i - 1, start));
-            start = i;
+            int j = indexs.top();
+            indexs.pop();
+            int cur = heights[j] * (indexs.empty() ? i : (i - indexs.top() - 1));
+            maxArea = max(maxArea, cur);
         }
     }
-    if (i != start)
-        res.emplace_back(pair<int, int>(i - 1, start));
-    return res;
+    return maxArea;
 }
+
 int cal(int m, int n, const vector<vector<int>> &inputs, int k)
 {
-    int max = m;
-    unordered_map<int, unordered_set<int>> last;
-    for (int i = 0; i < m; ++i)
+    int max = 0;
+    for (int i = 0; i < n; ++i)
     {
-        auto row = inputs[i];
-        auto pairs = rowU(n, row);
-        if (pairs.empty())
-            continue;
-        unordered_map<int, unordered_set<int>> curRow;
-        for (auto pair : pairs)
+        for (int j = 0; j < m; ++j)
         {
-            curRow[pair.first].insert(pair.second);
-            if (last.find(pair.first) != last.end() && last[pair.first].find(pair.second) != last[pair.first].end())
-                continue;
-            int cur = pair.first - pair.second + 1;
-            int k = i + 1;
-            while (k < m)
+            int pos = i;
+            int curMin = inputs[j][pos], curMax = inputs[j][pos];
+            pos++;
+            while (pos < n)
             {
-                bool flag = false;
-                int num = inputs[k][pair.second];
-                for (int j = pair.second + 1; j <= pair.first; ++j)
-                {
-                    if (num != inputs[k][j])
-                    {
-                        flag = true;
-                        break;
-                    }
-                }
-                k++;
-                if (!flag)
-                    cur += pair.first - pair.second + 1;
-                else
-                    break;
+                if (inputs[j][pos] > curMax)
+                    curMax = inputs[j][pos];
+                else if (inputs[j][pos] < curMin)
+                    curMin = inputs[j][pos];
+                
             }
-            if (cur > max)
-                max = cur;
         }
-        last = curRow;
     }
     return max;
 }
