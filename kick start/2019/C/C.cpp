@@ -41,13 +41,13 @@ int cal(const vector<int> &positions, const vector<int> &colors, int n, int k)
         return dp[c][k][1];
     for (int i = 2; i <= c; ++i)
     {
-        for (int j = 1; j <= dogs[i].size(); ++j)
+        for (int j = 1; j <= k; ++j)
         {
-            for (int m = 0; m <= j && m <= dogs[i - 1].size(); ++m)
+            for (int m = 0; m <= j && m < dogs[i].size(); ++m)
             {
-                dp[i][j][0] = min(dp[i][j][0], dp[i - 1][j - m][0] + dogs[i][j - m - 1] * 2);
-                dp[i][j][1] = min(dp[i][j][1], dp[i - 1][j - m][1] + dogs[i][j - m - 1] * 2);
-                dp[i][j][1] = min(dp[i][j][0], dp[i - 1][j - m][1] + dogs[i][j - m - 1]);
+                dp[i][j][0] = min(dp[i][j][0], dp[i - 1][j - m][0] + (m==0?0:dogs[i][m - 1] * 2));
+                dp[i][j][1] = min(dp[i][j][1], dp[i - 1][j - m][1] + (m==0?0:dogs[i][m - 1] * 2));
+                dp[i][j][1] = min(dp[i][j][0], dp[i - 1][j - m][1] + (m==0?0:dogs[i][m - 1]));
             }
         }
     }
