@@ -9,6 +9,8 @@ using namespace std;
 
 int cal(const vector<int> &positions, const vector<int> &colors, int n, int k)
 {
+    if (k < 1)
+        return 0;
     unordered_map<int, vector<int>> dogs;
     unordered_map<int, int> colorNo;
     int no = 1;
@@ -22,12 +24,12 @@ int cal(const vector<int> &positions, const vector<int> &colors, int n, int k)
         dogs[colorNo[colors[i]]].emplace_back(positions[i]);
     }
     int c = dogs.size();
-    for (int i = 0; i < c; ++i)
+    for (int i = 1; i <= c; ++i)
     {
         sort(dogs[i].begin(), dogs[i].end());
     }
-    vector<vector<vector<int>>> dp(c + 1, vector<vector<int>>(n + 1, vector<int>(2, INT_MAX)));
-    for (int i = 0; i <= c; ++i)
+    vector<vector<vector<long long>>> dp(c + 1, vector<vector<long long>>(n + 1, vector<long long>(2, INT_MAX)));
+    for (int i = 1; i <= c; ++i)
     {
         dp[i][0][0] = 0;
         dp[i][0][1] = 0;
@@ -43,11 +45,11 @@ int cal(const vector<int> &positions, const vector<int> &colors, int n, int k)
     {
         for (int j = 1; j <= k; ++j)
         {
-            for (int m = 0; m <= j && m < dogs[i].size(); ++m)
+            for (int m = 0; m <= j && m <= dogs[i].size(); ++m)
             {
-                dp[i][j][0] = min(dp[i][j][0], dp[i - 1][j - m][0] + (m==0?0:dogs[i][m - 1] * 2));
-                dp[i][j][1] = min(dp[i][j][1], dp[i - 1][j - m][1] + (m==0?0:dogs[i][m - 1] * 2));
-                dp[i][j][1] = min(dp[i][j][0], dp[i - 1][j - m][1] + (m==0?0:dogs[i][m - 1]));
+                dp[i][j][0] = min(dp[i][j][0], dp[i - 1][j - m][0] + (m == 0 ? 0 : dogs[i][m - 1] * 2));
+                dp[i][j][1] = min(dp[i][j][1], dp[i - 1][j - m][1] + (m == 0 ? 0 : dogs[i][m - 1] * 2));
+                dp[i][j][1] = min(dp[i][j][1], dp[i - 1][j - m][0] + (m == 0 ? 0 : dogs[i][m - 1]));
             }
         }
     }
@@ -60,7 +62,7 @@ int main()
     cin >> t;
     for (int i = 1; i <= t; ++i)
     {
-        int n, k, c = 0;
+        int n, k;
         cin >> n >> k;
         vector<int> positions(n, 0), colors(n, 0);
         for (int j = 0; j < n; ++j)
@@ -73,5 +75,6 @@ int main()
         }
         cout << "Case #" << i << ": " << cal(positions, colors, n, k) << endl;
     }
+    system("pause");
     return 0;
 }
