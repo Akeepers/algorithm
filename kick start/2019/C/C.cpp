@@ -75,6 +75,5 @@ int main()
         }
         cout << "Case #" << i << ": " << cal(positions, colors, n, k) << endl;
     }
-    system("pause");
     return 0;
 }
