@@ -11,7 +11,7 @@
 具体题解在这里：
 * [leetcode题解](https://akeeper.space/blog/leetcode-answers)
 
-## google kicj start
+## google kick start
 Kick Start算是Google的APAC Test，同时也是Google亚太地区招聘的笔试平台，Google亚太地区技术岗求职（正式/实习）均需要在该平台测试。（梦想还是要有的，万一进google了呢~）
 
 具体题解在这里：
