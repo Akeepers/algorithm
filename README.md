@@ -7,11 +7,13 @@
 学习算法，刷题是重中之重，该repo现包括LeetCode和google kick start
 ## leetcode
 目前ac 80+，答案尽可能地对运行时间进行了优化，即faster than 97.00% of C++ online submissions at least.
+
 具体题解在这里：
 * [leetcode题解](https://akeeper.space/blog/leetcode-answers)
 
 ## google kicj start
 Kick Start算是Google的APAC Test，同时也是Google亚太地区招聘的笔试平台，Google亚太地区技术岗求职（正式/实习）均需要在该平台测试。（梦想还是要有的，万一进google了呢~）
+
 具体题解在这里：
 * [google kick start题解](https://akeeper.space/blog/kick-start)
 
