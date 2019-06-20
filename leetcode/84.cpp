@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -12,25 +13,31 @@ public:
             return 0;
         if (heights.size() == 1)
             return heights[0];
+        heights.emplace_back(-1);
         int n = heights.size();
-        int minHeight = heights[0], count = 1;
-        vector<int> dp(n, 0);
-        dp[0] = heights[0];
-        for (int i = 1; i < n; ++i)
+        int maxArea = 0, i = 0;
+        stack<int> indexs;
+        while (i < n)
         {
-            if (minHeight <= heights[i])
+            if (indexs.empty() || heights[i] >= heights[indexs.top()])
+                indexs.push(i++);
+            else
             {
-                dp[i] = dp[i - 1] + minHeight;
-                if(dp[i<heights[i])
-                {
-                }
+                int j = indexs.top();
+                indexs.pop();
+                int cur = heights[j] * (indexs.empty() ? i : (i - indexs.top() - 1));
+                maxArea = max(maxArea, cur);
             }
         }
+        return maxArea;
     }
 };
 
 int main()
 {
+    vector<int> input = {4, 2, 0, 3, 2, 5};
+    Solution solution;
+    solution.largestRectangleArea(input);
     system("pause");
     return 0;
 }

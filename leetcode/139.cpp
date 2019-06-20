@@ -1,3 +1,4 @@
+#include <climits>
 #include <iostream>
 #include <string>
 #include <unordered_set>
@@ -7,34 +8,34 @@ using namespace std;
 
 class Solution
 {
-  public:
+public:
     bool wordBreak(string s, vector<string> &wordDict)
     {
         unordered_set<string> dicts;
+        int minLength = INT_MAX, maxLength = 0;
         for (auto item : wordDict)
         {
             dicts.insert(item);
+            if (item.size() < minLength)
+                minLength = item.size();
+            if (item.size() > maxLength)
+                maxLength = item.size();
         }
-        vector<int> dp(s.size(), false);
-        if (dicts.find(string(1, s[0])) != dicts.end())
-            dp[0] = true;
-        for (int i = 1; i < s.size(); ++i)
+        vector<bool> dp(s.size(), false);
+        if (dicts.count(s.substr(0, minLength)))
+            dp[minLength - 1] = true;
+        for (int i = minLength; i < s.size(); ++i)
         {
-            auto word = s.substr(0, i + 1);
-            if (dicts.find(word) != dicts.end())
-            {
+            if (dicts.count(s.substr(0, i + 1)))
                 dp[i] = true;
-                continue;
-            }
-            for (int j = i - 1; j >= 0; j--)
+            else
             {
-                if (dp[j])
+                int end = i - maxLength >= 0 ? i - maxLength : 0;
+                for (int j = i - minLength; j >= end; --j)
                 {
-                    word = s.substr(j + 1, i - j);
-                    if (dicts.find(word) != dicts.end())
+                    if (dp[j] && dicts.count(s.substr(j + 1, i - j)))
                     {
                         dp[i] = true;
-                        break;
                     }
                 }
             }
@@ -46,8 +47,8 @@ class Solution
 int main()
 {
     Solution solution;
-    vector<string> inputs = {"a"};
-    solution.wordBreak("a", inputs);
+    vector<string> inputs = {"apple","pen"};
+    solution.wordBreak("applepenapple", inputs);
     system("pause");
     return 0;
 }
