@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -16,28 +17,17 @@ public:
         for (auto item : wordDict)
         {
             dicts.insert(item);
-            if (item.size() < minLength)
-                minLength = item.size();
-            if (item.size() > maxLength)
-                maxLength = item.size();
+            minLength = min(minLength, (int)item.length());
+            maxLength = max(maxLength, (int)item.length());
         }
         vector<bool> dp(s.size(), false);
-        if (dicts.count(s.substr(0, minLength)))
-            dp[minLength - 1] = true;
+        dp[0] = true;
         for (int i = minLength; i < s.size(); ++i)
         {
-            if (dicts.count(s.substr(0, i + 1)))
-                dp[i] = true;
-            else
+            for (int len = minLength; len <= min(maxLength, i); ++len)
             {
-                int end = i - maxLength >= 0 ? i - maxLength : 0;
-                for (int j = i - minLength; j >= end; --j)
-                {
-                    if (dp[j] && dicts.count(s.substr(j + 1, i - j)))
-                    {
-                        dp[i] = true;
-                    }
-                }
+                if(dp[i-len]&&dicts.count(s.substr(i-len,len)))
+                    dp[i-1] = true;
             }
         }
         return dp[s.size() - 1];
@@ -47,7 +37,7 @@ public:
 int main()
 {
     Solution solution;
-    vector<string> inputs = {"apple","pen"};
+    vector<string> inputs = {"apple", "pen"};
     solution.wordBreak("applepenapple", inputs);
     system("pause");
     return 0;
