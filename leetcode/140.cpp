@@ -6,30 +6,17 @@ using namespace std;
 class Solution
 {
 private:
-    void getPath(const vector<int> &dp, vector<string> &res, const unordered_set<string> &dicts, string &s, string cur, int start, int minLength, int maxLength)
+    void getPath(const vector<bool> &dp, vector<string> &res, const unordered_set<string> &dicts, string &s, string cur, int start, int minLength, int maxLength)
     {
         int length = s.size();
-        if (start == length)
-            res.emplace_back(cur);
-        else
+        for (int pos = start + minLength; pos <= min(start + maxLength, length); ++pos)
         {
-            if (start + minLength > length)
-                return;
-            else
+            if (dp[pos] && dicts.count(s.substr(start, pos - start)))
             {
-                int end = start + maxLength > length ? length : start + maxLength;
-                for (int i = start + minLength - 1; i < end; ++i)
-                {
-                    if (dp[i])
-                    {
-                        auto word = s.substr(start, i - start + 1);
-                        if (dicts.count(word))
-                        {
-                            auto next = cur == "" ? word : cur + " " + word;
-                            getPath(dp, res, dicts, s, next, i + 1, minLength, maxLength);
-                        }
-                    }
-                }
+                if (pos == length)
+                    res.emplace_back(cur + s.substr(start, pos - start));
+                else
+                    getPath(dp, res, dicts, s, cur + s.substr(start, pos - start) + " ", pos, minLength, maxLength);
             }
         }
     }
@@ -37,28 +24,29 @@ private:
 public:
     vector<string> wordBreak(string s, vector<string> &wordDict)
     {
-        vector<string> res;
         unordered_set<string> dicts;
+        vector<string> res;
         int minLength = INT_MAX, maxLength = 0;
         for (auto item : wordDict)
         {
             dicts.insert(item);
-            if (item.size() < minLength)
-                minLength = item.size();
-            if (item.size() > maxLength)
-                maxLength = item.size();
+            minLength = min(minLength, (int)item.length());
+            maxLength = max(maxLength, (int)item.length());
         }
-        vector<int> dp(s.size(), false);
+        vector<bool> dp(s.size() + 1, false);
         dp[0] = true;
-        for (int i = minLength; i < s.size(); ++i)
+        for (int i = minLength; i <= s.size(); ++i)
         {
             for (int len = minLength; len <= min(maxLength, i); ++len)
             {
-                if(dp[i-len]&&dicts.count(s.substr(i-len,len)))
-                    dp[i-1] = true;
+                if (dp[i - len] && dicts.count(s.substr(i - len, len)))
+                    dp[i] = true;
             }
         }
-        getPath(dp, res, dicts, s, "", 0, minLength, maxLength);
+        if (dp[s.size()])
+        {
+            getPath(dp, res, dicts, s, "", 0, minLength, maxLength);
+        }
         return res;
     }
 };

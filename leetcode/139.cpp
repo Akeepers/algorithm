@@ -1,9 +1,9 @@
+#include <algorithm>
 #include <climits>
 #include <iostream>
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -20,17 +20,17 @@ public:
             minLength = min(minLength, (int)item.length());
             maxLength = max(maxLength, (int)item.length());
         }
-        vector<bool> dp(s.size(), false);
+        vector<bool> dp(s.size() + 1, false);
         dp[0] = true;
-        for (int i = minLength; i < s.size(); ++i)
+        for (int i = minLength; i <= s.size(); ++i)
         {
             for (int len = minLength; len <= min(maxLength, i); ++len)
             {
-                if(dp[i-len]&&dicts.count(s.substr(i-len,len)))
-                    dp[i-1] = true;
+                if (dp[i - len] && dicts.count(s.substr(i - len, len)))
+                    dp[i] = true;
             }
         }
-        return dp[s.size() - 1];
+        return dp[s.size()];
     }
 };
 
