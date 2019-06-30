@@ -1,9 +1,9 @@
 #include <algorithm>
 #include <climits>
 #include <iostream>
-#include <vector>
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 using namespace std;
 
@@ -56,15 +56,12 @@ public:
                 else
                     curCount[c] = 0;
             }
-            if (strs[i].size() == last.size() && isSame(lastCount, curCount))
-            {
-                cur.emplace_back(strs[i]);
-            }
-            else
+            if (strs[i].size() != last.size() || isSame(lastCount, curCount))
             {
                 res.emplace_back(cur);
                 cur.resize(0);
             }
+            cur.emplace_back(strs[i]);
             last = strs[i];
             lastCount = curCount;
         }
@@ -74,7 +71,7 @@ public:
 
 int main()
 {
-    vector<string> input={"eat","tea","tan","ate","nat","bat"};
+    vector<string> input = {"eat", "tea", "tan", "ate", "nat", "bat"};
     Solution solution;
     solution.groupAnagrams(input);
     system("pause");
