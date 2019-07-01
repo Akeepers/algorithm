@@ -9,66 +9,63 @@ using namespace std;
 
 class Solution
 {
-private:
-    bool isSame(unordered_map<char, int> &count1, unordered_map<char, int> &count2)
-    {
-        if (count1.size() != count2.size())
-            return false;
-        for (auto item : count1)
-        {
-            if (count2.count(item.first) == 0 || count2[item.first] != item.second)
-                return false;
-        }
-        return true;
-    }
-
 public:
     vector<vector<string>> groupAnagrams(vector<string> &strs)
     {
-
         vector<vector<string>> res;
-        if (strs.empty())
-            return res;
-        sort(strs.begin(), strs.end(), [](string a, string b) -> bool { return a.size() < b.size(); });
 
-        unordered_map<char, int> lastCount;
-        string last = strs[0];
-        for (auto c : strs[0])
+        unordered_map<string, vector<string>> mp;
+        for (auto& str : strs)
         {
-            if (lastCount.count(c))
-                lastCount[c]++;
-            else
-                lastCount[c] = 0;
+            string s = str;
+            sort(s.begin(), s.end());
+            mp[s].emplace_back(str);
         }
-        vector<string> cur = {last};
-        if (strs.size() == 1)
+
+        for (auto& item : mp)
         {
-            res.emplace_back(cur);
-            return res;
-        }
-        for (int i = 1; i < strs.size(); ++i)
-        {
-            unordered_map<char, int> curCount;
-            for (auto c : strs[i])
-            {
-                if (curCount.count(c))
-                    curCount[c]++;
-                else
-                    curCount[c] = 0;
-            }
-            if (strs[i].size() != last.size() || isSame(lastCount, curCount))
-            {
-                res.emplace_back(cur);
-                cur.resize(0);
-            }
-            cur.emplace_back(strs[i]);
-            last = strs[i];
-            lastCount = curCount;
+            res.emplace_back(item.second);
         }
         return res;
     }
 };
 
+class Solution2
+{
+private:
+    string stringSort(string &str)
+    {
+        vector<int> count(26, 0);
+        for (auto& c : str)
+        {
+            count[c - 'a']++;
+        }
+        string res = "";
+        for (auto& item : count)
+        {
+            res += item + 'a';
+        }
+        return res;
+    }
+
+public:
+    vector<vector<string>> groupAnagrams(vector<string> &strs)
+    {
+        vector<vector<string>> res;
+
+        unordered_map<string, vector<string>> mp;
+        for (auto& str : strs)
+        {
+            mp[stringSort(str)].emplace_back(str);
+        }
+
+        for (auto& item : mp)
+        {
+            res.emplace_back(item.second);
+        }
+        return res;
+    }
+};
 int main()
 {
     vector<string> input = {"eat", "tea", "tan", "ate", "nat", "bat"};
