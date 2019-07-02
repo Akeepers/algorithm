@@ -1,18 +1,19 @@
 #include <iostream>
-#include <stack>
-#include <unordered_map>
 #include <vector>
 
 using namespace std;
 
-int minTime(long long n)
+
+
+long long minTime(long long n)
 {
     int len = 0;
-    vector<int> nums(17,0);
-    while (n != 0)
+    long long num = n;
+    vector<int> nums(20, 0);
+    while (num != 0)
     {
-        nums[len++] = n % 10;
-        n /= 10;
+        nums[len++] = num % 10;
+        num /= 10;
     }
 
     auto digits = nums;
@@ -25,6 +26,7 @@ int minTime(long long n)
             {
                 digits[j] = 8;
             }
+            break;
         }
     }
     long long ans = 0;
@@ -34,7 +36,6 @@ int minTime(long long n)
     }
 
     digits = nums;
-    int pre = 0;
     for (int i = len - 1; i >= 0; --i)
     {
         if (digits[i] % 2 != 0)
@@ -49,13 +50,23 @@ int minTime(long long n)
                 while ((--j) >= 0)
                     digits[j] = 0;
             }
+            else
+            {
+                digits[i]++;
+                for (int j = i - 1; j >= 0; j--)
+                {
+                    digits[j] = 0;
+                }
+            }
+            break;
         }
     }
-    long long ans1=0;
-    for (int i=16;i>=0;--i){
-        ans1=ans1*10+digits[i];
+    long long ans1 = digits[len] != 0 ? digits[len] : 0;
+    for (int i = len - 1; i >= 0; --i)
+    {
+        ans1 = ans1 * 10 + digits[i];
     }
-    return min(n-ans1,n-ans);
+    return min(ans1 - n, n - ans);
 }
 
 int main()
