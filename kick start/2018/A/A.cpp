@@ -55,13 +55,6 @@ long long getNext(long long n)
             if (digits[i] == 9)
             {
                 return LONG_LONG_MAX;
-                // digits[i] = 0;
-                // int j = i + 1;
-                // while (digits[j] == 8)
-                //     j++;
-                // digits[j] += 2;
-                // while ((--j) >= 0)
-                //     digits[j] = 0;
             }
             else
             {
@@ -88,7 +81,7 @@ int main()
     cin >> t;
     for (int i = 1; i <= t; ++i)
     {
-        int n;
+        long long n;
         cin >> n;
         auto ret = min(n - getPre(n), getNext(n) - n);
         cout << "Case #" << i << ": " << ret << endl;
