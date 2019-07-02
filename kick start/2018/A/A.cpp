@@ -1,11 +1,10 @@
+#include <climits>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-
-
-long long minTime(long long n)
+long long getPre(long long n)
 {
     int len = 0;
     long long num = n;
@@ -34,21 +33,35 @@ long long minTime(long long n)
     {
         ans = ans * 10 + digits[i];
     }
+    return ans;
+}
 
-    digits = nums;
+long long getNext(long long n)
+{
+    int len = 0;
+    long long num = n;
+    vector<int> nums(20, 0);
+    while (num != 0)
+    {
+        nums[len++] = num % 10;
+        num /= 10;
+    }
+
+    auto digits = nums;
     for (int i = len - 1; i >= 0; --i)
     {
         if (digits[i] % 2 != 0)
         {
             if (digits[i] == 9)
             {
-                digits[i] = 0;
-                int j = i + 1;
-                while (digits[j] == 8)
-                    j++;
-                digits[j] += 2;
-                while ((--j) >= 0)
-                    digits[j] = 0;
+                return LONG_LONG_MAX;
+                // digits[i] = 0;
+                // int j = i + 1;
+                // while (digits[j] == 8)
+                //     j++;
+                // digits[j] += 2;
+                // while ((--j) >= 0)
+                //     digits[j] = 0;
             }
             else
             {
@@ -61,12 +74,12 @@ long long minTime(long long n)
             break;
         }
     }
-    long long ans1 = digits[len] != 0 ? digits[len] : 0;
+    long long ans = 0;
     for (int i = len - 1; i >= 0; --i)
     {
-        ans1 = ans1 * 10 + digits[i];
+        ans = ans * 10 + digits[i];
     }
-    return min(ans1 - n, n - ans);
+    return ans;
 }
 
 int main()
@@ -77,7 +90,7 @@ int main()
     {
         int n;
         cin >> n;
-        auto ret = minTime(n);
+        auto ret = min(n - getPre(n), getNext(n) - n);
         cout << "Case #" << i << ": " << ret << endl;
     }
     return 0;
