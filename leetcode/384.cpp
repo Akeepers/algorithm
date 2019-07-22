@@ -109,13 +109,12 @@ public:
     /** Returns a random shuffling of the array. */
     vector<int> shuffle()
     {
-        int pos = 0,k=_size;
-        vector<int> res(_size, 0);
+        int pos = 0;
+        vector<int> res(_curNums);
         for (int i = 0; i <_size; ++i)
         {
-            pos =  rand() % (k--);
-            res[i]= _curNums[pos];
-            _curNums.erase(_curNums.begin() + pos);
+            pos =  rand() % (i+1);
+            swap(res[i], res[pos]);
         }
         _curNums = res;
         return _curNums;
