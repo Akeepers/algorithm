@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <numeric>
 
 using namespace std;
 
@@ -27,6 +28,20 @@ public:
             res += str;
         }
         return res[0]=='0'?"0":res;
+    }
+};
+
+class Solution2
+{
+public:
+    string largestNumber(vector<int> &nums)
+    {
+        if (all_of(nums.begin(), nums.end(),[](int num) { return num == 0; }))
+            return "0";
+        vector<string> strs;
+        transform(nums.begin(), nums.end(), back_inserter(strs), [](int num) { return to_string(num); });
+        sort(strs.begin(), strs.end(), [](const string &a, const string &b) { return a + b > b + a; });
+        return accumulate(strs.begin(), strs.end(), string(""));
     }
 };
 
