@@ -9,7 +9,7 @@ using namespace std;
 class Solution
 {
 private:
-    static unordered_map<char, vector<char>> mapping;
+    static unordered_map<char, string> mapping;
     void visit(string &digits, int pos, string cur, vector<string> &res)
     {
         if (pos == digits.size())
@@ -35,7 +35,7 @@ public:
         return res;
     }
 };
-unordered_map<char, string> Solution::mapping = {{'2', "abc"}, {'3', "def"}, {'4', "ghi"}, {'5', "jkl", {'6', "mno"}, {'7',"pqrs"}, {'8', "tuv"}, {'9',"wxyz"}};
+unordered_map<char, string> Solution::mapping = {{'2', "abc"}, {'3', "def"}, {'4', "ghi"}, {'5', "jkl"}, {'6', "mno"}, {'7',"pqrs"}, {'8', "tuv"}, {'9',"wxyz"}};
 
 int main()
 {
