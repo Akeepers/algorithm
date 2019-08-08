@@ -6,7 +6,7 @@
 
 学习算法，刷题是重中之重，该repo现包括LeetCode和google kick start
 ## leetcode
-目前ac 80+，答案尽可能地对运行时间进行了优化，即faster than 97.00% of C++ online submissions at least.
+目前ac 100+，答案尽可能地对运行时间进行了优化，即faster than 97.00% of C++ online submissions at least.
 
 具体题解在这里：
 * [leetcode题解](https://akeeper.space/blog/leetcode-answers)
