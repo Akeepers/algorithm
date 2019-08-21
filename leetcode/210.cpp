@@ -14,12 +14,12 @@ class Solution
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>> &prerequisites)
     {
-        vector<vector<int>> g(numCourses);
+        vector<vector<int>> graph(numCourses);
         vector<int> inDegree(numCourses, 0);
         for (auto item : prerequisites)
         {
-            g[item[0]].emplace_back(item[1]);
-            inDegree[item[1]]++;
+            graph[item[1]].emplace_back(item[0]);
+            inDegree[item[0]]++;
         }
 
         stack<int> s;
@@ -37,28 +37,29 @@ public:
             s.pop();
             order.push_back(cur);
             visited++;
-            for (auto node : g[cur])
+            for (auto node : graph[cur])
             {
                 if (--inDegree[node] == 0)
                     s.push(node);
             }
         }
-        if(visited!=numCourses){
+        if (visited != numCourses)
+        {
             vector<int> ret;
             return ret;
         }
         return order;
-        }
+    }
 
 private:
     vector<vector<int>> buildGraph(int numCourses, vector<vector<int>> &prerequisites)
     {
-        vector<vector<int>> g;
+        vector<vector<int>> graph;
         for (auto item : prerequisites)
         {
-            g[item[0]].emplace_back(item[1]);
+            graph[item[0]].emplace_back(item[1]);
         }
-        return g;
+        return graph;
     }
 };
 
