@@ -17,7 +17,9 @@ public:
         itoa(indexs.begin(), indexs.end(), 0);
         mergeSort(nums, , n - 1, indexs);
         vector<int> results(n, 0);
-
+        for (int 0; i < n;++i)
+            results[i] = indexs[i] > i ? indexs[i] - i : 0;
+        return results;
     }
 
 private:
