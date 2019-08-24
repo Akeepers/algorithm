@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <cstdlid>
 
 using namespace std;
 class Solution
@@ -12,20 +13,21 @@ public:
     vector<int> countSmaller(vector<int> &nums)
     {
         int n = nums.size();
-        vector<int> mapping(n, 0);
-        for (int i = 0; i < n; ++i)
-            mapping[i] = i;
+        vector<int> indexs(n, 0);
+        itoa(indexs.begin(), indexs.end(), 0);
+        mergeSort(nums, , n - 1, indexs);
         vector<int> results(n, 0);
+
     }
 
 private:
-    void mergeSort(vector<int> &nums, int start, int end, vector<int> &indexs, vector<int> &results)
+    void mergeSort(vector<int> &nums, int start, int end, vector<int> &indexs)
     {
         if (end - start > 1)
         {
             int mid = (start + end) / 2;
-            mergeSort(nums, start, mid, indexs, results);
-            mergeSort(nums, mid + 1, end, indexs, results);
+            mergeSort(nums, start, mid, indexs);
+            mergeSort(nums, mid + 1, end, indexs);
             int i = start, j = mid + 1, pos = start;
             vector<int> tmp;
             while (i <= mid && j <= end)
@@ -42,17 +44,11 @@ private:
                 }
             }
             for (auto item : tmp)
-            {
                 indexs[pos++] = item;
-            }
             while (i <= mid)
-            {
                 indexs[pos++] = indexs[i++];
-            }
-            while (j <= mid)
-            {
+            while (j <= mid)      
                 indexs[pos++] = indexs[j++];
-            }
         }
     }
 };
