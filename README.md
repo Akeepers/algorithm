@@ -17,3 +17,4 @@ Kick Start算是Google的APAC Test，同时也是Google亚太地区招聘的笔�
 具体题解在这里：
 * [google kick start题解](https://akeeper.space/blog/kick-start)
 
+> 觉得我的文章对您有帮助的话，就给个[star](https://github.com/Akeepers/algorithm)吧～
