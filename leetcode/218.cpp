@@ -1,36 +1,24 @@
 #include <algorithm>
 #include <climits>
 #include <iostream>
-#include <vector>
-#include <unordered_set>
+#include <queue>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 using namespace std;
 
-class Solution {
+class Solution
+{
 public:
-    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
-        vector<int> height(INT_MAX+1, 0);
-        int end = 0;
-        for (auto building : buildings)
-        {
-            for (int i = building[0]; i <= building[1];++i){
-                height[i] = height[i] < building[2] ? building[2] : height[i];
-                end = building[1] > end ? building[1] : end;
-            }
+    vector<vector<int>> getSkyline(vector<vector<int>> &buildings)
+    {
+        vector<pair<int, int>> items;
+        for(auto building:buildings){
+            items.emplace_back(building[0], -building[2]);
+            items.emplace_back(building[1], building[2]);
         }
-        int last = 0;
-        vector<vector<int>> results;
-        for (int i = 0; i <= end; ++i)
-        {
-            if(height[i]!=last){
-                vector<int> tmp = {i, height[i]};
-                results.emplace_back(tmp);
-                last = height[i];
-            }
-        }
-        vector<int> tmp = {end, 0};
-        results.emplace_back(tmp);
+        sort(items.begin(), items.end());
         return results;
     }
 };
