@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <set>
 
 using namespace std;
 
@@ -69,6 +70,39 @@ private:
     }
 };
 
+//扫描线
+class Solution1
+{
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>> &buildings)
+    {
+        if (buildings.empty())
+            return buildings;
+        vector<pair<int, int>> heights;
+        for(auto building:buildings){
+            heights.emplace_back(make_pair(building[0], -building[2]));
+            heights.emplace_back(make_pair(building[1], building[2]));
+        }
+        sort(heights.begin(), heights.end());
+        multiset<int> cur;
+        vector<vector<int>> res;
+        int preHeight = 0;
+        cur.insert(0);
+        for (int i = 0; i < heights.size();++i){
+            if(heights[i].second<0)
+                cur.insert(-heights[i].second);
+            else{
+                auto it = cur.find(heights[i].second);
+                cur.erase(it);
+            }
+            if(*cur.rbegin()!=preHeight){
+                preHeight = *cur.rbegin();
+                res.emplace_back(vector<int>{heights[i].first, preHeight});
+            }
+        }
+        return res;
+    }
+};
 int main()
 {
     system("pause");
