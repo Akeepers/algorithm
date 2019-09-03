@@ -13,19 +13,14 @@ typedef long long ll;
 
 int main()
 {
-	vector<bool> xorOdd(1025);
-	for (int i = 0; i <= 1024; ++i)
-	{
-		xorOdd[i] = bitset<11>(i).count() & 1;
-	}
 	auto t = 0;
 	cin >> t;
 	for (int i = 1; i <= t; ++i)
 	{
 		cout << "Case #" << i << ":";
-		int n, q;
-		cin >> n >> q;
-		set<int> indexs;
+		int n, g, m;
+		cin >> n >> g>>m;
+		vector<int>
 		for (int j = 0; j < n; j++)
 		{
 			int x;
