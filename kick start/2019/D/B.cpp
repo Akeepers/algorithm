@@ -20,30 +20,28 @@ int main()
 		cout << "Case #" << i << ":";
 		int n, g, m;
 		cin >> n >> g>>m;
-		vector<int>
-		for (int j = 0; j < n; j++)
+		vector<vector<int>> consulates(n,vector<int>(2,0));
+		vector<int> clockwiseGuest, antiGuest;
+
+		for (int j = 0; j < g; j++)
 		{
 			int x;
-			cin >> x;
-			if (xorOdd[x])
-				indexs.insert(j);
-		}
-		for (int j = 0; j < q; j++)
-		{
-			int tmp1, tmp2;
-			cin >> tmp1 >> tmp2;
-			if (indexs.count(tmp1))
-				indexs.erase(tmp1);
-			if (xorOdd[tmp2])
-				indexs.insert(tmp1);
-			if (indexs.size() % 2 == 0)
-				cout << " " << n;
-			else
-			{
-				int r = *indexs.rbegin();
-				int l = *indexs.begin();
-				cout<<" "<<max(r, n - l - 1);
+			char c;
+			cin>>x>>c;
+			if(c=='C'){
+				clockwiseGuest.emplace_back(x);
+			}else{
+				antiGuest.emplace_back(x);
 			}
+		}
+		int pos;
+		for(auto item:clockwiseGuest){
+			pos=(item+m)%n;
+			consulates[pos][0]++;
+			consulates[pos][1]=m;
+		}
+		for(int i=pos-1;i!=pos;i=(i-1+m)%n){
+			
 		}
 		cout << endl;
 	}
