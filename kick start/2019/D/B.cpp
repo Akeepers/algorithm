@@ -11,6 +11,18 @@ using namespace std;
 
 typedef long long ll;
 
+vector<int> solve(int n, int m, int g, vector<pair<int, int>> &clockwiseGuest, vector<pair<int, int>> &antiGuest)
+{
+	vector<pair<int, vector<int>>> consulates(n);
+	int pos;
+	for (auto guest : clockwiseGuest)
+	{
+		pos = (guest.second + m) % n;
+		consulates[pos].first = m;
+		consulates[pos].emplace_back(item.first);
+	}
+}
+
 int main()
 {
 	auto t = 0;
@@ -20,27 +32,16 @@ int main()
 		cout << "Case #" << i << ":";
 		int n, g, m;
 		cin >> n >> g >> m;
-		vector<vector<int>> consulates(n, vector<int>(1, 0));
-		vector<pair<int,int>> clockwiseGuest, antiGuest;
+		vector<pair<int, int>> clockwiseGuest, antiGuest;
 		for (int j = 0; j < g; j++)
 		{
 			int x;
 			char c;
 			cin >> x >> c;
 			if (c == 'C')
-				clockwiseGuest.emplace_back(make_pair(j,x));
+				clockwiseGuest.emplace_back(make_pair(j, x));
 			else
-				antiGuest.emplace_back(make_pair(j,x));
-		}
-		int pos;
-		for (auto item : clockwiseGuest)
-		{
-			pos = (item.second + m) % n;
-			consulates[pos][0]=m;
-			consulates[pos].emplace_back(item.first);
-		}
-		for (int i = pos - 1; i != pos; i = (i - 1 + m) % n)
-		{
+				antiGuest.emplace_back(make_pair(j, x));
 		}
 		cout << endl;
 	}
