@@ -12,7 +12,7 @@
 using namespace std;
 
 typedef long long ll;
-typedef pair<int, int> p;
+typedef pair<ll, ll> p;
 
 typedef struct
 {
@@ -25,52 +25,52 @@ ll solve(ll n, ll k, vector<Node> &positions)
 	ll k2 = k - k1;
 	priority_queue<ll> q1;
 	priority_queue<p, vector<p>, greater<>> q2;
-	unordered_set<ll> indexs;
+	set<ll> indexs;
 
 	ll left = 0;
-	for (int i = 0; i < k1; ++i)
+	for (ll i = 0; i < k1; ++i)
 	{
 		auto v = positions[i].c - positions[i].x;
 		left += v;
 		q1.push(v);
 	}
-	for (int i = k1 + 1; i < n; ++i)
+	for (ll i = k1 + 1; i < n; ++i)
 	{
 		q2.push(make_pair(positions[i].c + positions[i].x, i));
 	}
 	ll right = 0;
 
-	for (int i = 0; i < k2; ++i)
+	for (ll i = 0; i < k2; ++i)
 	{
 		auto top = q2.top();
+		q2.pop();
 		right += top.first;
 		indexs.insert(top.second);
-		q2.pop();
 	}
-	ll res = left + right + k1 * positions[k1].x - k2 * positions[k1].x + positions[k1].c;
-	for (int i = k1 + 1; i < n - k2; ++i)
+	ll res = left + right + 1ll*k1 * positions[k1].x - 1ll*k2 * positions[k1].x + positions[k1].c;
+	for (ll i = k1 + 1; i < n - k2; ++i)
 	{
 		auto cur = positions[i];
 		if (!q1.empty())
 		{
-			auto tmp = cur.c - cur.x;
-			if (tmp < q1.top())
+			auto tmp = positions[i-1].c-positions[i-1].x;
+			if ( tmp< q1.top())
 			{
 				left = left - q1.top() + tmp;
 				q1.pop();
 				q1.push(tmp);
 			}
 		}
-		if (!indexs.empty())
+		if (indexs.begin()!=indexs.end())
 		{
-			if (indexs.count(i))
+			if (*indexs.begin()==i)
 			{
-				int t;
+				ll t;
 				do
 				{
 					t = q2.top().second;
 					q2.pop();
-				} while (t <= i && !q2.empty());
+				} while (t <= i  );
 				if (q2.empty())
 					break;
 				indexs.erase(i);
@@ -78,7 +78,7 @@ ll solve(ll n, ll k, vector<Node> &positions)
 				right = right - positions[i].c - positions[i].x + positions[t].c + positions[t].x;
 			}
 		}
-		res = min(res, left + right + k1 * cur.x - k2 * cur.x + cur.c);
+		res = min(res, left + right +1ll* k1 * cur.x - 1ll*k2 * cur.x + cur.c);
 	}
 	return res;
 }
