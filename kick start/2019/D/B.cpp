@@ -20,81 +20,66 @@ int getMod(int a, int b)
 	return tmp;
 }
 
+typedef struct Node
+{
+	int pos, dir, cnt;
+	vector<int> ids;
+} Guest;
+
 vector<int> solve(int n, int m, int g, vector<pair<int, int>> &clockwiseGuest, vector<pair<int, int>> &antiGuest)
 {
-	vector<int> times1(n, 0), times2(n, 0);
-	vector<vector<int>> consulates(n);
-	vector<pair<int, vector<int>>> consulates2(n);
+	vector<int> consulates(n, -1);
+	vector<Guest> groups;
+	vector<vector<int>> guests(n * 2);
+	int pos;
+	for (auto guest : clockwiseGuest)
+	{
+		pos = getMod(guest.second + m, n);
+		guests[pos].emplace_back(guest.first);
+	}
+	for (auto guest : antiGuest)
+	{
+		pos = getMod(guest.second - m, n);
+		guests[pos + n].emplace_back(guest.first);
+	}
+	for (int i = 0; i < n * 2; ++i)
+	{
+		if (guests[i].empty())
+			continue;
+		if (i < n)
+		{
+			groups.emplace_back(Guest{i, -1, 0, guests[i]});
+		}
+		else
+		{
+			groups.emplace_back(Guest{i - n, 1, 0, guests[i]});
+		}
+	}
+	int visited = 0;
+	m = m > n ? n : m; 
+	for (int time = m; time >= 0 && visited < n; --time)
+	{
+		for (int i = 0; i < groups.size(); ++i)
+		{
+			pos = groups[i].pos;
+			if (consulates[pos] < time)
+			{
+				visited++;
+				consulates[pos] = time;
+			}
+			if (consulates[pos] == time)
+				groups[i].cnt++;
+			groups[i].pos = getMod(pos + groups[i].dir, n);
+		}
+	}
+
 	vector<int> res(g, 0);
-	int pos, last, step;
-	if (!clockwiseGuest.empty())
+	for (auto group : groups)
 	{
-		for (auto guest : clockwiseGuest)
+		for (auto id : group.ids)
 		{
-			pos = getMod(guest.second + m, n);
-			times1[pos] = m;
-			consulates[pos].emplace_back(guest.first);
+			res[id] = group.cnt;
 		}
-		last = pos;
-		step = 0;
-		for (int i = getMod(pos - 1, n); i != pos; i = getMod(i - 1, n))
-		{
-			if (times1[i] == m)
-			{
-				last = i;
-				step = 0;
-			}
-			else
-			{
-				step++;
-				if (step > m)
-					continue;
-				times1[i] = m - step;
-				consulates[i] = vector<int>(consulates[last]);
-			}
-		}
-	}
-	if (!antiGuest.empty())
-	{
-		for (auto guest : antiGuest)
-		{
-			pos = getMod(guest.second - m, n);
-			times2[pos] = m;
-			if (times1[pos] == m)
-			{
-				consulates[pos].emplace_back(guest.first);
-			}
-			else
-			{
-				consulates[pos] = vector<int>{guest.first};
-			}
-		}
-		last = pos;
-		step = 0;
-		for (int i = getMod(pos + 1, n); i != pos; i = getMod(i + 1, n))
-		{
-
-			if (times2[i] == m)
-			{
-				last = i;
-				step = 0;
-				continue;
-			}
-			step++;
-			if (step > m)
-				continue;
-			auto curTime = m - step;
-			if(curTime==times1[i])
-			{
-				consulates2[i].second = vector<int>(consulates2[last].second);
-			}
-		}
-	}
-
-	for (int i = 0; i < n; ++i)
-	{
-		for (auto guest : consulates[i])
-			res[guest]++;
 	}
 	return res;
 }
@@ -119,7 +104,6 @@ int main()
 			else
 				antiGuest.emplace_back(make_pair(j, x - 1));
 		}
-		m = n + m % n;
 		auto res = solve(n, m, g, clockwiseGuest, antiGuest);
 		cout << "Case #" << i << ":";
 		for (auto item : res)
