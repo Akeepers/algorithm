@@ -12,7 +12,7 @@
 using namespace std;
 
 typedef long long ll;
-typedef pair<ll, ll> p;
+typedef pair<int, int> p;
 
 typedef struct
 {
@@ -28,32 +28,32 @@ ll solve(ll n, ll k, vector<Node> &positions)
 	unordered_set<ll> indexs;
 
 	ll left = 0;
-	for (ll i = 0; i < k1; ++i)
+	for (int i = 0; i < k1; ++i)
 	{
 		auto v = positions[i].c - positions[i].x;
 		left += v;
 		q1.push(v);
 	}
-	for (ll i = k1 + 1; i < n; ++i)
+	for (int i = k1 + 1; i < n; ++i)
 	{
 		q2.push(make_pair(positions[i].c + positions[i].x, i));
 	}
 	ll right = 0;
 
-	for (ll i = 0; i < k2; ++i)
+	for (int i = 0; i < k2; ++i)
 	{
 		auto top = q2.top();
-		q2.pop();
 		right += top.first;
 		indexs.insert(top.second);
+		q2.pop();
 	}
 	ll res = left + right + k1 * positions[k1].x - k2 * positions[k1].x + positions[k1].c;
-	for (ll i = k1 + 1; i < n - k2; ++i)
+	for (int i = k1 + 1; i < n - k2; ++i)
 	{
 		auto cur = positions[i];
 		if (!q1.empty())
 		{
-			auto tmp = positions[i - 1].c - positions[i - 1].x;
+			auto tmp = cur.c - cur.x;
 			if (tmp < q1.top())
 			{
 				left = left - q1.top() + tmp;
@@ -65,13 +65,15 @@ ll solve(ll n, ll k, vector<Node> &positions)
 		{
 			if (indexs.count(i))
 			{
-				indexs.erase(i);
-				ll t;
+				int t;
 				do
 				{
 					t = q2.top().second;
 					q2.pop();
-				} while (t <= i);
+				} while (t <= i && !q2.empty());
+				if (q2.empty())
+					break;
+				indexs.erase(i);
 				indexs.insert(t);
 				right = right - positions[i].c - positions[i].x + positions[t].c + positions[t].x;
 			}
@@ -83,25 +85,16 @@ ll solve(ll n, ll k, vector<Node> &positions)
 
 int main()
 {
-	auto t = 0;
-	cin >> t;
-	for (ll i = 1; i <= t; ++i)
-	{
-
-		ll k, n;
-		cin >> k >> n;
-		vector<Node> positions(n);
-		for (ll j = 0; j < n; ++j)
-		{
-			cin >> positions[j].x;
-		}
-		for (ll j = 0; j < n; ++j)
-		{
-			cin >> positions[j].c;
-		}
-		sort(positions.begin(), positions.end(), [](const Node &a, const Node &b) { return a.x < b.x; });
-		auto res = solve(n, k, positions);
-		cout << "Case #" << i << ": " << res << endl;
-	}
+	unordered_set<int> set;
+	cout << set.size() << " " << (set.empty() ? "T" : "F") << endl;
+	set.insert(1);
+	set.insert(2);
+	cout << set.size() << " " << (set.empty() ? "T" : "F") << endl;
+	cout << set.count(1) << endl;
+	set.erase(1);
+	cout << set.count(1) << endl;
+	cout << set.size() << " " << (set.empty() ? "T" : "F") << endl;
+	set.erase(2);
+	cout << set.size() << " " << (set.empty() ? "T" : "F") << endl;
 	return 0;
 }
