@@ -19,20 +19,18 @@ typedef struct
 	vector<int> adv;
 } Node;
 
-void dfs(int cur, const vector<vector<int>> &graph, vector<bool> &visited, int &cnt)
+void dfs(int cur, const vector<vector<int>> &graph, vector<bool> &visited)
 {
 	visited[cur] = true;
 	if (graph[cur].empty())
 	{
-		cnt++;
 		return;
 	}
 	for (auto next : graph[cur])
 	{
 		if (visited[next])
 			continue;
-		dfs(next, graph, visited, cnt);
-		cnt++;
+		dfs(next, graph, visited);
 	}
 
 }
@@ -43,8 +41,10 @@ int slove(int n, vector<vector<int>> &graph)
 	vector<bool> visited(n, false);
 	for (int i = 0; i < n; ++i)
 	{
-		if (!visited[i])
-			dfs(i, graph, visited, cnt);
+		if (!visited[i]){
+			dfs(i, graph, visited);
+			cnt++;
+		}
 	}
 	return 2 * (cnt - 1) + n - cnt;
 }
