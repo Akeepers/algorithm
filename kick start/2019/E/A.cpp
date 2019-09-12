@@ -11,14 +11,6 @@ using namespace std;
 
 typedef long long ll;
 
-const int INF = 1000000000;
-
-typedef struct
-{
-	int cur;
-	vector<int> adv;
-} Node;
-
 void dfs(int cur, const vector<vector<int>> &graph, vector<bool> &visited)
 {
 	visited[cur] = true;
