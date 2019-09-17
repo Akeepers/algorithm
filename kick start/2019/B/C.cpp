@@ -58,7 +58,6 @@ struct SegTree
 			if (r & 1)
 				res += tree[--r];
 		}
-
 		return res;
 	}
 };
