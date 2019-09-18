@@ -18,11 +18,12 @@ const int N = 100000 + 3;
 struct SegTree
 {
 	int tree[2 * N];
+	int n;
 
 	// function to build the tree
-	void build(vector<int> arr)
+	void build(vector<int> arr, int _n)
 	{
-		int n = arr.size();
+		n = _n;
 		// insert leaf nodes in tree
 		for (int i = 0; i < n; i++)
 			tree[n + i] = arr[i];
@@ -60,30 +61,60 @@ struct SegTree
 		}
 		return res;
 	}
+
+	void clear()
+	{
+		memset(tree, N * 2, sizeof(int));
+	}
 };
 
 SegTree seg;
 
 void slove()
 {
-	ll n, s;
+	int n, s;
 	cin >> n >> s;
-	vector<ll> inputs;
-	unordered_map<ll, vector<ll>> dicts;
-
-	for (ll i = 0; i < n; ++i)
+	vector<int> trinkets(n);
+	unordered_map<int, vector<int>> dicts;
+	unordered_map<int, int> cnt;
+	for (int i = 0; i < n; ++i)
 	{
-		cin >> inputs[i];
-		dicts[inputs[i]].emplace_back(i);
+		cin >> trinkets[i];
+		// if (dicts.count(trinkets[i]) == 0 || dicts[trinkets[i]].size() < s)
+		// 	tmp[i] = 1;
+		// else if (dicts[trinkets[i]].size() == s)
+		// 	tmp[i] = -s;
+		// else
+		// 	tmp[i] = 0;
+		dicts[trinkets[i]].emplace_back(i);
+		// cnt[trinkets[i]]++;
 	}
 
 	seg.clear();
-	ll res = 0;
-	for (int l = n - 1; l >= 0; ++l)
+	vector<int> tmp(n, 1);
+	seg.build(tmp, n);
+	int res = 0;
+	for (int l = n - 1; l >= 0; --l)
 	{
-		seg.update(1, l, n);
+		auto cur = trinkets[l];
+		++cnt[cur];
+		int t =  cnt[cur]-s;
+		if (t == 1)
+		{
+			auto pos = dicts[cur].size() - t;
+			seg.updateTreeNode(dicts[cur][pos], -s);
+		}
+		if (t > 1)
+		{
+			auto pos = dicts[cur].size() - t;
+			seg.updateTreeNode(dicts[cur][pos+1], 0);
+			seg.updateTreeNode(dicts[cur][pos], -s);
+		}
+		res = max(res, seg.query(l, n));
 	}
+	cout << res << endl;
 }
+
 int main()
 {
 	auto t = 0;
