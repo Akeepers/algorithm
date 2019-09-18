@@ -8,6 +8,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <memory.h>
 
 using namespace std;
 
@@ -76,39 +77,38 @@ void slove()
 	cin >> n >> s;
 	vector<int> trinkets(n);
 	unordered_map<int, vector<int>> dicts;
-	unordered_map<int, int> cnt;
+	vector<int> tmp(n, 1);
 	for (int i = 0; i < n; ++i)
 	{
 		cin >> trinkets[i];
-		// if (dicts.count(trinkets[i]) == 0 || dicts[trinkets[i]].size() < s)
-		// 	tmp[i] = 1;
-		// else if (dicts[trinkets[i]].size() == s)
-		// 	tmp[i] = -s;
-		// else
-		// 	tmp[i] = 0;
+		if (dicts.count(trinkets[i]) == 0 || dicts[trinkets[i]].size() < s)
+			tmp[i] = 1;
+		else if (dicts[trinkets[i]].size() == s)
+			tmp[i] = -s;
+		else
+			tmp[i] = 0;
 		dicts[trinkets[i]].emplace_back(i);
 		// cnt[trinkets[i]]++;
 	}
 
 	seg.clear();
-	vector<int> tmp(n, 1);
 	seg.build(tmp, n);
 	int res = 0;
+	unordered_map<int, int> cnt;
 	for (int l = n - 1; l >= 0; --l)
 	{
 		auto cur = trinkets[l];
 		++cnt[cur];
-		int t =  cnt[cur]-s;
-		if (t == 1)
+		if (cnt[cur]+s >dicts[cur].size()+1)
 		{
-			auto pos = dicts[cur].size() - t;
-			seg.updateTreeNode(dicts[cur][pos], -s);
+			auto pos = cnt[cur] +s-1;
+			seg.updateTreeNode(dicts[cur][pos], 1);
+			seg.updateTreeNode(dicts[cur][pos+1], -s);
 		}
-		if (t > 1)
+		if (cnt[cur]+s ==dicts[cur].size()+1)
 		{
-			auto pos = dicts[cur].size() - t;
-			seg.updateTreeNode(dicts[cur][pos+1], 0);
-			seg.updateTreeNode(dicts[cur][pos], -s);
+			auto pos = cnt[cur] +s-1;
+			seg.updateTreeNode(dicts[cur][pos], 1);
 		}
 		res = max(res, seg.query(l, n));
 	}
