@@ -27,7 +27,7 @@ ll count(ll d)
     for (int i = n - 1; i >=0; --i)
     {
         if (i > 0)
-            res += bits[i] * pow(9, i - 1) * 8;
+            res += bits[i] * powl(9, i - 1) * 8;
         else
         {
             for (ll j = d - bits[i]; j <= d; ++j)
