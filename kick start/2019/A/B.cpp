@@ -2,10 +2,21 @@
 #include <climits>
 #include <cmath>
 #include <iostream>
+#include <queue>
 #include <vector>
 
 using namespace std;
 
+#define INF 0x3f3f3f3f
+#define INF64 0x3f3f3f3f3f3f3f3f
+
+const vector<int> dx = {-1, 0, 0, 1};
+const vector<int> dy = {0, 1, -1, 0};
+
+inline bool isOutOfBound(int x, int y, int r, int c)
+{
+    return x < 0 || x >= r || y < 0 || y >= c;
+}
 void bfs(int a, int b, int r, int c, int d, int &res, vector<vector<int>> &dist)
 {
     if (d >= dist[a][b])
@@ -29,7 +40,7 @@ void slove()
     vector<vector<int>> grid(r, vector<int>(c, 0));
     vector<vector<int>> dist(r, vector<int>(c, INT_MAX));
     string tmp;
-    int res = -1;
+    queue<pair<int, int>> q;
     for (int i = 0; i < r; ++i)
     {
         cin >> tmp;
@@ -37,18 +48,28 @@ void slove()
         {
             if (tmp[j] == '1')
             {
+                q.push(make_pair(i, j));
                 grid[i][j] = 1;
                 dist[i][j] = 0;
             }
         }
     }
-    for (int i = 0; i < r; ++i)
+
+    //multi-bfs
+    int maxDist = 0;
+    while (!q.empty())
     {
-        for (int j = 0; j < c; ++j)
+        auto cur = q.front();
+        maxDist = dist[cur.first][cur.second];
+        for (int i = 0; i < 4; ++i)
         {
-            if (grid[i][j] == 0)
-                continue;
-            bfs(i, j, r, c, 0, res, dist);
+            auto x = cur.first + dx[i];
+            auto y = cur.second + dy[i];
+            if (!isOutOfBound(x, y, r, c) && dist[x][y] != INT_MAX)
+            {
+                dist[x][y] = maxDist + 1;
+                q.push(make_pair(x, y));
+            }
         }
     }
 
