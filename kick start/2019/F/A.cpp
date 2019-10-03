@@ -21,73 +21,46 @@ void slove()
 {
 	int n, k;
 	cin >> n >> k;
-	vector<int> walls(n + 1, 0);
-	int j = 1;
-	unordered_map<int, int> indexs;
+	vector<ll> walls(n + 1, 0);
+	unordered_set<ll> unique;
 	for (int i = 1; i <= n; ++i)
 	{
-		cin >> walls[j];
-		if (walls[j] != walls[j - 1])
-		{
-			j++;
-		}
+		cin >> walls[i];
+		unique.insert(walls[i]);
 	}
-	int cnt = 0;
-	walls[0] = walls[1];
-	for (int i = 1; i <= n; ++i)
+	vector<ll> nums(unique.begin(), unique.end());
+	auto t = nums.size();
+	vector<vector<vector<ll>>> dp(n + 1, vector<vector<ll>>(k + 1, vector<ll>(t, INF64)));
+	vector<vector<ll>> minD(n + 1, vector<ll>(k + 1, INF64));
+	minD[1][0] = 0;
+	for (int i = 0; i < t; ++i)
 	{
-		cnt += walls[i] != walls[i - 1];
-	}
-	if (cnt <= k)
-	{
-		cout << 0 << endl;
-		return;
-	}
-	if (cnt == k + 1)
-	{
-		cout << 1 << endl;
-		return;
-	}
-	vector<pair<int, int>> items;
-	// auto res = cnt - k;
-	// auto pos = 1;
-	for (int i = 1; i <= cnt; ++i)
-	{
-		if (!indexs.count(walls[i]))
-		{
-			indexs[walls[i]] = i;
-		}
-		else if (indexs[walls[i]] == i - 1)
-		{
-			indexs[walls[i]] = i;
-		}
+		if (walls[1] != nums[i])
+			dp[1][0][i] = 1;
 		else
+			dp[1][0][i] = 0;
+	}
+
+	for (int i = 2; i <= n; ++i)
+	{
+		for (int j = 0; j <= min(k, i - 1); ++j)
 		{
-			items.emplace_back(make_pair(i,indexs[i]);
-			indexs[i]=i;
+			for (int m = 0; m < t; ++m)
+			{
+				dp[i][j][m] = dp[i - 1][j][m];
+				if (j > 0)
+					dp[i][j][m] = min(dp[i][j][m], minD[i - 1][j - 1]);
+				if (walls[i] != nums[m])
+					dp[i][j][m]++;
+				minD[i][j] = min(minD[i][j], dp[i][j][m]);
+			}
 		}
 	}
-	if (items.empty())
-	{
-		cout << cnt - k << endl;
-		return;
-	}
-	sort(items.begin(), items.end(), [](const pair<int, int> &a, const pair<int, int> &b) { return (a.second - a.first) < (b.second - b.first); });
-	for (auto item : items)
-	{
-		auto d = item.second - item.first - 1;
-		cnt -= d + 1;
-		if (cnt > k)
-			continue;
-		if (cnt == k)
-		{
-			cout << d << endl;
-			return;
-		}
-		cout << cnt - k - 1 << endl;
-		return;
-	}
-	cout << cnt - k << endl;
+	ll res = INF64;
+	for (int j = 0; j <= k; ++j)
+		for (int m = 0; m < t; ++m)
+			res = min(res, dp[n][j][m]);
+	cout << res << endl;
 }
 
 int main()
