@@ -95,22 +95,23 @@ void slove()
 	seg.build(tmp, n);
 	int res = 0;
 	unordered_map<int, int> cnt;
-	for (int l = n - 1; l >= 0; --l)
+	for (int l = 0; l < n; ++l)
 	{
+		res = max(res, seg.query(l, n));
 		auto cur = trinkets[l];
 		++cnt[cur];
-		if (cnt[cur]+s >dicts[cur].size()+1)
+		if (cnt[cur] + s < dicts[cur].size())
 		{
-			auto pos = cnt[cur] +s-1;
+			auto pos = cnt[cur] + s - 1;
 			seg.updateTreeNode(dicts[cur][pos], 1);
-			seg.updateTreeNode(dicts[cur][pos+1], -s);
+			seg.updateTreeNode(dicts[cur][pos + 1], -s);
 		}
-		if (cnt[cur]+s ==dicts[cur].size()+1)
+		if (cnt[cur] + s == dicts[cur].size())
 		{
-			auto pos = cnt[cur] +s-1;
+			auto pos = cnt[cur] + s - 1;
 			seg.updateTreeNode(dicts[cur][pos], 1);
 		}
-		res = max(res, seg.query(l, n));
+
 	}
 	cout << res << endl;
 }

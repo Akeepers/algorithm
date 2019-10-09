@@ -15,21 +15,42 @@ using namespace std;
 typedef long long ll;
 const ll INF = 1e17;
 
+string encode(char c, vector<int> &count)
+{
+	count[c - 'A']++;
+	string res = "";
+	for (auto item : count)
+		res += 'A' + item;
+	return res;
+}
 void slove()
 {
 	int l;
 	cin >> l;
 	string a, b;
 	cin >> a >> b;
-	vector<vector<vector<int>>> countA(l, vector<vector<int>>(l, vector<int>(26, 0)));
-	vector<vector<vector<int>>> countB(l, vector<vector<int>>(l, vector<int>(26, 0)));
+	unordered_set<string> strsOfB;
 	for (int i = 0; i < l; ++i)
 	{
+		vector<int> tmp(26, 0);
 		for (int j = i; j < l; ++j)
 		{
-			countA[make_pair(i, j)] = vector<int>(26, 0);
+			strsOfB.insert(encode(b[j], tmp));
 		}
 	}
+
+	int res = 0;
+	for (int i = 0; i < l; ++i)
+	{
+		vector<int> tmp(26, 0);
+		for (int j = i; j < l; ++j)
+		{
+			auto str = encode(a[j], tmp);
+			if (strsOfB.count(str))
+				res++;
+		}
+	}
+	cout << res << endl;
 }
 
 int main()
