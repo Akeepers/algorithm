@@ -11,7 +11,7 @@ const vector<int> dy = {0, 1, -1, 0};
 class Solution
 {
 
-    bool check(int i, int j, int m, int n) return (i < m && i >= 0) && (j < n && j >= 0);
+    bool check(int i, int j, int m, int n) { return (i < m && i >= 0) && (j < n && j >= 0); }
 
     void dfs(vector<vector<int>> &grid, int x, int y, int cnt, int &res)
     {
