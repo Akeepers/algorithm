@@ -8,29 +8,29 @@ using namespace std;
 class Solution
 {
 public:
-    int longestValidParentheses(string s)
+    int minDistance(string word1, string word2)
     {
-        int n = s.length();
-        if (n <= 1)
-            return 0;
-        vector<int> dp(n, 0);
-        dp[1] = (s[1] == ')' && s[0] == '(') ? 2 : 0;
-        auto res = dp[1];
-        for (int i = 2; i < n; ++i)
+        int m = word1.length(), n = word2.length();
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+        for (int i = 1; i <= m; ++i)
         {
-            if (s[i] == ')')
+            dp[i][0] = i;
+        }
+        for (int i = 1; i <= n; ++i)
+        {
+            dp[0][i] = i;
+        }
+        for (int i = 1; i <= m; ++i)
+        {
+            for (int j = 1; j <= n; ++j)
             {
-                if (s[i - 1] == '(')
-                    dp[i] = dp[i - 2] + 2;
+                if (word1[i - 1] == word2[j - 1])
+                    dp[i][j] = dp[i - 1][j - 1];
                 else
-                {
-                    if (i - dp[i - 1] - 1 >= 0 && s[i - dp[i - 1] - 1] == '(')
-                        dp[i] = dp[i - 1] + 2 + ((i - dp[i - 1] - 2 >= 0) ? dp[1 - dp[i - 1] - 2] : 0);
-                }
-                res = max(res, dp[i]);
+                    dp[i][j] = min(dp[i - 1][j], min(dp[i - 1][j - 1], dp[i][j - 1])) + 1;
             }
         }
-        return res;
+        return dp[m][n];
     }
 };
 
