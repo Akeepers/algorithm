@@ -14,8 +14,6 @@ using namespace std;
 
 typedef long long ll;
 
-#define INF 0x3f3f3f3f
-#define INF64 0x3f3f3f3f3f3f3f3f
 
 ll utity(vector<ll>& a, vector<ll>& b, int n, int h)
 {
@@ -32,20 +30,14 @@ ll utity(vector<ll>& a, vector<ll>& b, int n, int h)
 					t1 = h - 1;
 					break;
 				}
-				if (i & (1 << k))
+				if (f1)
 				{
-					f1 = true;
 					t1 += a[k];
 				}
-				if (j & (1 << k))
+				if (f2)
 				{
 					t2 += b[k];
-					f2 = true;
 				}
-				if (f1 || f2)
-					continue;;
-				t1 = h - 1;
-				break;
 			}
 			if (t1 >= h && t2 >= h)
 				res++;

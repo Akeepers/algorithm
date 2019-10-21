@@ -17,64 +17,64 @@ typedef long long ll;
 #define INF 0x3f3f3f3f
 #define INF64 0x3f3f3f3f3f3f3f3f
 
-int seed = 13331;
-
 void slove()
 {
-	int n, m;
+	ll n, m;
 	cin >> n >> m;
-	vector<int> nums(n, 0);
-	for (int i = 0; i < n; ++i)
+	vector<ll> nums(n, 0);
+	for (ll i = 0; i < n; ++i)
 	{
 		cin >> nums[i];
 	}
-	vector<ll> count(50, 0);
-	for (int i = 0; i < 50; ++i)
+	vector<ll> count(51, 0);
+	for (ll i = 0; i < 51; ++i)
 	{
-		for (int j = 0; j < n; ++j)
+		for (ll j = 0; j < n; ++j)
 		{
-			count[i] += (nums[j] & 1);
-			nums[j] = nums[j] >> 1;
+			if ((nums[j] & (1ll << i)) > 0)
+				count[i]++;
 		}
 	}
-	// ll min = 0, max = 0, t1 = 0, t2 = 0;
-	ll res = -1;
-	
-	for (int i = 49; i >= 0; --i)
+	ll res = 0;
+	ll sum = 0;
+	for (ll i = 50; i >= 0; --i)
 	{
-		ll cur = 0;
-		for (int j = i; j >= 0; --j)
+		ll a = n - count[i];
+		if (a <= count[i])
 		{
-			int a = n - count[j];
-			if (a < count[j])
+			sum += (1ll << i) * a;
+			res += (1ll << i);
+		}
+		else
+		{
+			sum += (1ll << i) * count[i];
+		}
+	}
+	if (sum > m)
+	{
+		cout << -1 << endl;
+		return;
+	}
+	for (ll i = 50; i >= 0; --i)
+	{
+		ll a = n - count[i];
+		if (a > count[i])
+		{
+			if (sum + (a - count[i]) * (1ll << i) <= m)
 			{
-				cur += pow(2, j) * a;
-				// min += pow(2, i) * a;
-				res += pow(2, j);
-				// max += pow(2, i) * count[i];
-			}
-			else
-			{
-				cur += pow(2, j) * count[j];
-				// min += pow(2, i) * count[i];
-				// max += pow(2, i) * a;
-			}
-			if(cur>m){
-				res = -1;
-				break;
+				sum += (a - count[i]) * (1ll << i);
+				res += (1ll << i);
 			}
 		}
-		if(res!=-1)
-			break;
 	}
 	cout << res << endl;
 }
 
 int main()
 {
-	int t = 0;
+	ll t = 0;
 	cin >> t;
-	for (int i = 1; i <= t; ++i)
+	for (ll i = 1; i <= t; ++i)
 	{
 		cout << "Case #" << i << ": ";
 		slove();
