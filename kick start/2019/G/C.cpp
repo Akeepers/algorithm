@@ -14,53 +14,44 @@ using namespace std;
 
 typedef long long ll;
 
+ll res;
+vector<ll> pow3(21, 1);
 
-ll utity(vector<ll>& a, vector<ll>& b, int n, int h)
+void dfs(ll v1, ll v2, int cur, vector<pair<ll, ll>> &nums, vector<ll> &sumA, vector<ll> &sumB, int h, int n)
 {
-	ll res = 0;
-	for (int i = 0; i < (1 << n); ++i)
+	if (v1 >= h && v2 >= h)
 	{
-		for (int j = 0; j < (1 << n); ++j)
-		{
-			ll t1 = 0, t2 = 0;
-			for (int k = 0; k < n; ++k)
-			{
-				bool f1 = i & (1 << k), f2 = j & (1 << k);
-				if(!f1&&!f2){
-					t1 = h - 1;
-					break;
-				}
-				if (f1)
-				{
-					t1 += a[k];
-				}
-				if (f2)
-				{
-					t2 += b[k];
-				}
-			}
-			if (t1 >= h && t2 >= h)
-				res++;
-		}
+		res += pow3[n - cur];
+		return;
 	}
-	return res;
+	if (cur >= n)
+		return;
+	if (v1 + sumA[n - cur] < h || v2 + sumB[n - cur] < h)
+		return;
+	dfs(v1 + nums[cur].first, v2, cur + 1, nums, sumA, sumB, h, n);
+	dfs(v1, v2 + nums[cur].second, cur + 1, nums, sumA, sumB, h, n);
+	dfs(v1 + nums[cur].first, v2 + nums[cur].second, cur + 1, nums, sumA, sumB, h, n);
 }
 
 void slove()
 {
 	int n, h;
 	cin >> n >> h;
-	vector<ll> a(n, 0), b(n, 0);
+	vector<pair<ll, ll>> nums(n);
 	for (int i = 0; i < n; ++i)
-	{
-		cin >> a[i];
-	}
-
+		cin >> nums[i].first;
 	for (int i = 0; i < n; ++i)
+		cin >> nums[i].second;
+	sort(nums.begin(), nums.end(), greater<pair<ll, ll>>());
+	vector<ll> sumA(n + 1, 0), sumB(n + 1, 0);
+	for (int i = n - 1; i >= 0; --i)
 	{
-		cin >> b[i];
+		sumA[n - i] = sumA[n - i - 1] + nums[i].first;
+		sumB[n - i] = sumB[n - i - 1] + nums[i].second;
+		res = 0;
 	}
-	auto res = utity(a, b, n, h);
+	res = 0;
+	dfs(0, 0, 0, nums, sumA, sumB, h, n);
 	cout << res << endl;
 }
 
@@ -68,6 +59,9 @@ int main()
 {
 	int t = 0;
 	cin >> t;
+	pow3[0] = 1;
+	for (int i = 1; i <= 20; ++i)
+		pow3[i] = pow3[i - 1] * 3;
 	for (int i = 1; i <= t; ++i)
 	{
 		cout << "Case #" << i << ": ";
