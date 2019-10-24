@@ -2,7 +2,7 @@
 这里记录博主算法之路，也尝试写下自己学习算法时的收获。与常见的算法题解不同，博主**尝试**总结整理一套求解问题的思考方式，希望做到知其然，知其所以然~
 
 总结文章在这里：
-* [算法笔记(一)-概述，面对问题的思考方式](https://akeeper.space/blog/archives/351)
+* [算法笔记(一)-概述，面对问题的思考方式](https://akeeper.space/blog/351.html)
 
 学习算法，刷题是重中之重，该repo现包括LeetCode和google kick start
 ## leetcode
