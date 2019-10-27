@@ -7,21 +7,24 @@
 using namespace std;
 
 //hash table
-class Solution {
+class Solution
+{
 public:
-    int longestConsecutive(vector<int>& nums) {
-        unordered_set<int> records(nums.begin(),nums.end());
-        int res=0;
-        for(auto num:nums){
-            if(!records.count(num))
+    int longestConsecutive(vector<int> &nums)
+    {
+        unordered_set<int> records(nums.begin(), nums.end());
+        int res = 0;
+        for (auto num : nums)
+        {
+            if (!records.count(num))
                 continue;
             records.erase(num);
-            auto pre=num-1,next=num+1;
-            while(records.count(pre))
+            auto pre = num - 1, next = num + 1;
+            while (records.count(pre))
                 records.erase(pre--);
-            while(records.count(next))
-                records.erase(pre++);
-            res=max(res,next-pre-1);
+            while (records.count(next))
+                records.erase(next++);
+            res = max(res, next - pre - 1);
         }
         return res;
     }
