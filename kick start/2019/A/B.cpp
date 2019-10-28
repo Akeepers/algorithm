@@ -10,6 +10,8 @@ using namespace std;
 #define INF 0x3f3f3f3f
 #define INF64 0x3f3f3f3f3f3f3f3f
 
+typedef long long ll;
+
 const vector<int> dx = {-1, 0, 0, 1};
 const vector<int> dy = {0, 1, -1, 0};
 
@@ -17,20 +19,32 @@ inline bool isOutOfBound(int x, int y, int r, int c)
 {
     return x < 0 || x >= r || y < 0 || y >= c;
 }
-void bfs(int a, int b, int r, int c, int d, int &res, vector<vector<int>> &dist)
+
+bool check(int cur, int r, int c, vector<vector<int>> &dist)
 {
-    if (d >= dist[a][b])
-        return;
-    dist[a][b] = d;
-    res = max(res, d);
-    if (a + 1 < r)
-        bfs(a + 1, b, r, c, d + 1, res, dist);
-    if (b + 1 < c)
-        bfs(a, b + 1, r, c, d + 1, res, dist);
-    if (a - 1 >= 0)
-        bfs(a - 1, b, r, c, d + 1, res, dist);
-    if (b - 1 >= 0)
-        bfs(a, b - 1, r, c, d + 1, res, dist);
+    int x = -INF;
+    int y = INF;
+    int z = -INF;
+    int w = INF;
+    for (int i = 0; i < r; ++i)
+        for (int j = 0; j < c; ++j)
+            if (dist[i][j] > cur)
+            {
+                x = max(x, i + j);
+                y = min(y, i + j);
+                z = max(z, i - j);
+                w = min(w, i - j);
+            }
+    if (w == INF)
+        return true;
+    for (int i = 0; i < r; ++i)
+        for (int j = 0; j < c; ++j)
+            if (abs(x - (i + j)) <= cur &&
+                abs(y - (i + j)) <= cur &&
+                abs(z - (i - j)) <= cur &&
+                abs(w - (i - j)) <= cur)
+                return true;
+    return false;
 }
 
 void slove()
@@ -60,30 +74,29 @@ void slove()
     while (!q.empty())
     {
         auto cur = q.front();
+        q.pop();
         maxDist = dist[cur.first][cur.second];
         for (int i = 0; i < 4; ++i)
         {
             auto x = cur.first + dx[i];
             auto y = cur.second + dy[i];
-            if (!isOutOfBound(x, y, r, c) && dist[x][y] != INT_MAX)
+            if (!isOutOfBound(x, y, r, c) && dist[x][y] == INT_MAX)
             {
                 dist[x][y] = maxDist + 1;
                 q.push(make_pair(x, y));
             }
         }
     }
-
-    for (int i = 0; i < r; ++i)
+    int high = maxDist, low = 0;
+    while (low <= high)
     {
-        for (int j = 0; j < c; ++j)
-        {
-            if (grid[i][j] == 1)
-                continue;
-            auto t(dist);
-            bfs(i, j, r, c, 0, res, t);
-        }
+        int mid = (low + high) / 2;
+        if (check(mid, r, c, dist))
+            high = mid - 1;
+        else
+            low = mid + 1;
     }
-    cout << res << endl;
+    cout << high + 1 << endl;
 }
 
 int main()
