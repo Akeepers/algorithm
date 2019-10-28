@@ -2,27 +2,22 @@
 #include <vector>
 
 using namespace std;
-class Solution
-{
+class Solution {
 public:
-    vector<vector<int>> subsets(vector<int> &nums)
-    {
-        vector<vector<int>> ret;
-        ret.emplace_back(vector<int>(0));
-        if (nums.empty())
-            return ret;
-        int n = nums.size();
-        int i = 0;
-        while (i < n)
-        {
-            vector<int> vec;
-            for (; i + step <= n; i++)
-            {
-                ret.emplace_back(vector<int>(nums.begin() + i, nums.begin() + i + step));
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> res;
+        auto n=nums.size();
+        if(nums.empty())
+            return res;
+        for(int i=0;i<(1<<n);++i){
+            vector<int> sub;
+            for(int j=0;j<n;++j){
+                if(i&(1<<j))
+                    sub.emplace_back(nums[j]);
             }
-            step++;
+            res.emplace_back(sub);
         }
-        return ret;
+        return res;
     }
 };
 int main()
