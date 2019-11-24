@@ -18,15 +18,41 @@ void slove()
 {
 	bool res = false;
 	vector<ll> nums(200, 0);
-	ll cnt = 0, tmp;
+	ll cnt = 0, tmp, cnt1 = 0, cnt2 = 0, sum = 0;
+	vector<pair<ll, int>> others;
 	for (int i = 1; i <= 9; ++i)
 	{
 		cin >> tmp;
-		while ((tmp--) > 0)
+		if (tmp > 10)
 		{
-			nums[cnt++] = i;
+			cnt1++;
+			others.push_back(make_pair(tmp, i));
 		}
+		else
+		{
+			sum += tmp;
+			while ((tmp--) > 0)
+			{
+				nums[cnt++] = i;
+			}
+		}
+		if (tmp > 6)
+			cnt2++;
 	}
+	if (cnt1 >= 2 || cnt2 >= 3)
+	{
+		cout << "Yes" << endl;
+		return;
+	}
+	if (!others.empty())
+	{
+		tmp = sum + ((others[0].first - sum) & 1);
+		while ((tmp--) > 0)
+			{
+				nums[cnt++] = others[0].second;
+			}
+	}
+
 	do
 	{
 		ll cur = 0;

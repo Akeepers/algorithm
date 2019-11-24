@@ -19,36 +19,20 @@ typedef long long ll;
 #define INF64 0x3f3f3f3f3f3f3f3f
 #define MAX 10001
 
-const vector<int> dx = {1, -1};
-const vector<int> dy = {1, -1};
-
-void bfs(stack<pair<int, int>> postions, int cnt, int depth, int n, bitset<MAX> board)
+void dfs(vector<vector<int>> &graph, int cur, vector<vector<int>> &board, vector<bool> &visited, int &nocolored, int &colored, bool flag)
 {
-	auto cur = postions.top();
-	postions.pop();
-	while (board[cur.first * n + cur.second] == 1)
+	flag ? colored++ : nocolored++;
+	visited[cur] = true;
+	for (auto &next : graph[cur])
 	{
-		auto cur = postions.top();
-		postions.pop();
-	}
-	bitset<MAX> board1(board);
-	while (cur.first < n && cur.second < n)
-	{
-		int pos = cur.first * n + cur.second;
-		board.flip(pos);
-		if (board.test(pos))
+		if (!visited[next])
 		{
-			cnt--;
+			if (board[cur][next] == 1)
+				dfs(graph, next, board, visited, nocolored, colored, !flag);
+			else
+				dfs(graph, next, board, visited, nocolored, colored, flag);
 		}
-		else
-		{
-			cnt++;
-		}
-		cur.first++;
-		cur.second++;
 	}
-	if (cnt == 0)
-		return depth
 }
 
 void slove()
@@ -57,95 +41,35 @@ void slove()
 	char tmp;
 	cin >> n;
 
-	bitset<MAX> board;
-	int cnt = 0;
-	stack<pair<int, int>> postions;
-	// vector<vector<int>> board(n, vector<int>(n, 1));
+	vector<vector<int>> board(4 * n - 2, vector<int>(4 * n - 2, 0));
+	vector<vector<int>> graph(4 * n - 2);
 	for (ll i = 0; i < n; ++i)
 	{
 		for (ll j = 0; j < n; ++j)
 		{
 			cin >> tmp;
+			int x = i + j, y = 3 * n - 2 - i + j;
+			graph[x].push_back(y);
+			graph[y].push_back(x);
 			if (tmp == '.')
-			{
-				cnt++;
-				board.set(1 * n + j);
-				postions.push(make_pair(i, j));
-			}
-			else
-			{
-				board.reset(i * n + j);
-			}
+				board[x][y] = board[y][x] = 1;
 		}
 	}
-	int res = INT_MAX;
-	for (ll i = 0; i < (1 << 4 * n - 2); ++i)
+	vector<bool> visited(4 * n - 2, false);
+	int res = 0;
+	for (int i = 0; i < 4 * n - 2; ++i)
 	{
-		bitset<MAX> board1(board);
-		int cur = 0;
-		for (int k = 0; k < 4 * n - 2; ++k)
+		if (!visited[i])
 		{
-			int l = 0, r = 0;
-			if (i & (1 << k))
-			{
-				cur++;
-				if (k < n)
-				{
-					l = k;
-					while (l < n && r < n)
-					{
-						int pos = l * n + r;
-						board1.flip(pos);
-						l++;
-						r++;
-					}
-				}
-				else if (k < 2 * n - 1)
-				{
-					r = k - n + 1;
-					while (l < n && r < n)
-					{
-						int pos = l * n + r;
-						board1.flip(pos);
-						l++;
-						r++;
-					}
-				}
-				else if (k < 3 * n - 2)
-				{
-					l = k - 2 * n + 2;
-					while (l >= 0 && r >= 0)
-					{
-						int pos = l * n + r;
-						board1.flip(pos);
-						l--;
-						r--;
-					}
-				}
-				else
-				{
-					l = n - 1;
-					r = k - 3 * n + 2;
-					while (l >= 0 && r >= 0)
-					{
-						int pos = l * n + r;
-						board1.flip(pos);
-						l--;
-						r--;
-					}
-				}
-			}
-			if(board1.none()){
-				res = min(res, cur);
-			}
+			int nocolored = 0;
+			int colored = 0;
+			dfs(graph, i, board, visited, nocolored, colored, false);
+			res += min(nocolored, colored);
 		}
 	}
+
 	cout << res << endl;
 }
-// int res = 0;
-// if (cnt == 0)
-// 	cout << res << endl;
-
 
 int main()
 {
