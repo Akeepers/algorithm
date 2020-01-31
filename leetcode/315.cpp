@@ -77,6 +77,7 @@ public:
             results[i] = insert(root, nums[i]);
         return results;
     }
+
 private:
     struct Node
     {
