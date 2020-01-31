@@ -12,7 +12,7 @@ class UnionFind {
             _parents[i] = i;
         }
     }
-    
+
     int find(int u) {
         if (_parents[u] != u) {
             _parents[u] = find(_parents[u]);
@@ -22,16 +22,19 @@ class UnionFind {
 
     bool is_connected(int u, int v) { return find(u) == find(v); }
 
-    void unin(int u, int v) {
+    // false - 代表图有环路
+    bool unin(int u, int v) {
         int fau = find(u);
         int fav = find(v);
+        if (fau == fav) return false;
         _parents[fav] = fau;
+        return true;
     }
 
     int get_connected_component() {
         int cnt = -1;
         for (int i = 0; i < _len; ++i) {
-            if (i != _parents[i]) cnt++;
+            if (i == _parents[i]) cnt++;
         }
         return cnt;
     }
