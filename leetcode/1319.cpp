@@ -2,7 +2,7 @@
  * @Author: yangpan
  * @Date: 2020-01-31 16:05:49
  * @LastEditors  : yangpan
- * @LastEditTime : 2020-01-31 20:16:30
+ * @LastEditTime : 2020-01-31 20:22:30
  * @Description: file content
  * @FilePath: \leetcode\1319.cpp
  */
@@ -45,7 +45,7 @@ class UnionFind {
     int get_connected_component_cnt() {
         int cnt = -1;
         for (int i = 0; i < _len; ++i) {
-            if (i != _parents[i]) cnt++;
+            if (i == _parents[i]) cnt++;
         }
         return cnt;
     }
